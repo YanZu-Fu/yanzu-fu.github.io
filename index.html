@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- <base href="/mob/" /> -->
+    <title>一站式移动端</title>
+    <script>
+      // 初始化 Bridge ,这个方法是固定的，必须要调用
+      // 提请调用，加快初始化速度
+      function connectWebViewJavascriptBridge(callback) {
+        if (window.WebViewJavascriptBridge) {
+          callback(window.WebViewJavascriptBridge)
+        } else {
+          document.addEventListener(
+            'WebViewJavascriptBridgeReady',
+            function () {
+              callback(window.WebViewJavascriptBridge)
+            },
+            false
+          )
+        }
+      }
+      connectWebViewJavascriptBridge(function (bridge) {
+        bridge.init(function (message, responseCallback) {
+          responseCallback(message)
+          console.log('JS got a message fr', message)
+        })
+        // todo 这个时候，其实可以让客户端注入一些数据，比如用户信息，设备信息到 window 上或 locastorage 上
+      })
+    </script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
